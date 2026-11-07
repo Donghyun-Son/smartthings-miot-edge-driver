@@ -1,0 +1,11 @@
+{
+  "tag": "ko",
+  "label": "남은 건조 시간",
+  "attributes": {
+    "dryRemainingTime": {
+      "label": "남은 건조 시간",
+      "displayTemplate": "{{device.label}}의 {{attribute}}: {{value}}초"
+    }
+  },
+  "commands": {}
+}

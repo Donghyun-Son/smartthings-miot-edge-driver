@@ -15,21 +15,6 @@
       },
       "setter": "setAutoDry",
       "enumCommands": []
-    },
-    "dryRemainingTime": {
-      "schema": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 1000
-          }
-        },
-        "additionalProperties": false,
-        "required": ["value"]
-      },
-      "enumCommands": []
     }
   },
   "commands": {

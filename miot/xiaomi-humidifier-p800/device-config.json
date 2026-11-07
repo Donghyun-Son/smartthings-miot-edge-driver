@@ -1,0 +1,335 @@
+{
+  "mnmn": "SmartThingsCommunity",
+  "type": "profile",
+  "dashboard": {
+    "states": [
+      {
+        "component": "main",
+        "capability": "switch",
+        "version": 1,
+        "idx": 0,
+        "group": "main",
+        "values": [
+          {
+            "label": "{{switch.value}}"
+          }
+        ],
+        "composite": true
+      },
+      {
+        "component": "main",
+        "capability": "relativeHumidityMeasurement",
+        "version": 1,
+        "idx": 0,
+        "group": "main",
+        "values": [
+          {
+            "label": " {{humidity.value}}{{humidity.unit}}"
+          }
+        ],
+        "composite": true
+      }
+    ],
+    "actions": [
+      {
+        "component": "main",
+        "capability": "switch",
+        "version": 1,
+        "idx": 0,
+        "group": "main",
+        "inline": null
+      }
+    ],
+    "basicPlus": []
+  },
+  "detailView": [
+    {
+      "component": "main",
+      "capability": "switch",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "temperatureMeasurement",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "relativeHumidityMeasurement",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "tigerautumn15768.waterLevel",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "tigerautumn15768.dryRemainingTime",
+      "version": 1,
+      "values": [],
+      "patch": [],
+      "visibleCondition": {
+        "value": "dryRemainingTime.value",
+        "operator": "GREATER_THAN",
+        "operand": 0,
+        "component": "main",
+        "capability": "tigerautumn15768.dryRemainingTime",
+        "version": 1,
+        "hideOnUnmatch": true
+      }
+    },
+    {
+      "component": "main",
+      "capability": "filterState",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "hardwareFault",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "concertmirror08464.xiaomiHumP800FanMode",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "concertmirror08464.xiaomiHumP800TargetHumidity",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "audioMute",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "concertmirror08464.xiaomiHumP800ChildLock",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "concertmirror08464.xiaomiHumP800LedBrightness",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "refresh",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "tigerautumn15768.overwetProtect",
+      "version": 1,
+      "values": [],
+      "patch": []
+    },
+    {
+      "component": "main",
+      "capability": "tigerautumn15768.filterAutoDry",
+      "version": 1,
+      "values": [],
+      "patch": []
+    }
+  ],
+  "automation": {
+    "conditions": [
+      {
+        "component": "main",
+        "capability": "switch",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "temperatureMeasurement",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "relativeHumidityMeasurement",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "tigerautumn15768.waterLevel",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "filterState",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "hardwareFault",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "concertmirror08464.xiaomiHumP800FanMode",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "concertmirror08464.xiaomiHumP800TargetHumidity",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "audioMute",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "concertmirror08464.xiaomiHumP800ChildLock",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "concertmirror08464.xiaomiHumP800LedBrightness",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "tigerautumn15768.overwetProtect",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "tigerautumn15768.filterAutoDry",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      }
+    ],
+    "actions": [
+      {
+        "component": "main",
+        "capability": "switch",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "concertmirror08464.xiaomiHumP800FanMode",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "concertmirror08464.xiaomiHumP800TargetHumidity",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "audioMute",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "concertmirror08464.xiaomiHumP800ChildLock",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "concertmirror08464.xiaomiHumP800LedBrightness",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "tigerautumn15768.overwetProtect",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      },
+      {
+        "component": "main",
+        "capability": "tigerautumn15768.filterAutoDry",
+        "version": 1,
+        "values": [],
+        "patch": [],
+        "exclusion": []
+      }
+    ]
+  }
+}

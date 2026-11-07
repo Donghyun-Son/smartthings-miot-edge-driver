@@ -1,0 +1,19 @@
+{
+  "dashboard": {
+    "states": [],
+    "actions": []
+  },
+  "detailView": [
+    {
+      "label": "남은 건조 시간",
+      "displayType": "state",
+      "state": {
+        "label": "{{dryRemainingTime.value}}초"
+      }
+    }
+  ],
+  "automation": {
+    "conditions": [],
+    "actions": []
+  }
+}

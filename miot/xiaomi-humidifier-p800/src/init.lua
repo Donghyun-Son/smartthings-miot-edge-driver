@@ -15,6 +15,7 @@ local deviceControlsLedBrightness = capabilities["concertmirror08464.xiaomiHumP8
 local capWaterLevel = capabilities["tigerautumn15768.waterLevel"]
 local capOverwetProtect = capabilities["tigerautumn15768.overwetProtect"]
 local capFilterAutoDry = capabilities["tigerautumn15768.filterAutoDry"]
+local capDryRemaining = capabilities["tigerautumn15768.dryRemainingTime"]
 
 -- 상수 정의
 
@@ -159,7 +160,7 @@ local function poll_device_status(device)
                     device:emit_event(capFilterAutoDry.autoDry({value = value and "on" or "off"}))
                 elseif piid == DRY_REMAIN_PIID and type(value) == "number" then
                     local remain = math.max(0, math.min(1000, math.floor(value)))
-                    device:emit_event(capFilterAutoDry.dryRemainingTime({value = remain}))
+                    device:emit_event(capDryRemaining.dryRemainingTime({value = remain}))
                 end
             elseif siid == BUZZER_SIID and piid == BUZZER_PIID then
                 device:emit_event(value and capabilities.audioMute.mute.unmuted()
@@ -419,7 +420,8 @@ local function ensure_profile(device)
         or not device:supports_capability_by_id(capabilities.filterState.ID, "main")
         or not device:supports_capability_by_id(capabilities.hardwareFault.ID, "main")
         or not device:supports_capability_by_id(capOverwetProtect.ID, "main")
-        or not device:supports_capability_by_id(capFilterAutoDry.ID, "main") then
+        or not device:supports_capability_by_id(capFilterAutoDry.ID, "main")
+        or not device:supports_capability_by_id(capDryRemaining.ID, "main") then
         device:try_update_metadata({profile = "xiaomi-humidifier-p800"})
     end
 end
