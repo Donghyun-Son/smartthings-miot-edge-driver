@@ -5,7 +5,7 @@ local Driver = require "st.driver"
 local discovery = require "discovery"
 local miio = require "miio"
 
-local airModeAirPurifierMode = capabilities["concertmirror08464.zhimiAirV7AirPurifierMode"]
+local airModeAirPurifierMode = capabilities["tigerautumn15768.airPurifierMode"]
 local deviceControlsChildLock = capabilities["concertmirror08464.zhimiAirV7ChildLock"]
 local favoriteFanLevel = capabilities["concertmirror08464.zhimiAirV7FavoriteFanLevel"]
 local indicatorLight = capabilities["concertmirror08464.zhimiAirV7IndicatorLight"]
@@ -35,26 +35,25 @@ local STATUS_PROPERTIES = {
 local MODE_TO_ST = {
     auto = "auto",
     silent = "sleep",
-    favorite = "favorite",
-    idle = "idle",
-    medium = "medium",
-    high = "high",
-    strong = "strong",
-    low = "low"
+    favorite = "favorite"
 }
 local ST_TO_MODE = {
     auto = "auto",
     sleep = "silent",
-    favorite = "favorite",
-    idle = "idle",
-    medium = "medium",
-    high = "high",
-    strong = "strong",
-    low = "low"
+    favorite = "favorite"
 }
 local FAVORITE_LEVEL_MIN = 0
 local FAVORITE_LEVEL_MAX = 17
-local SUPPORTED_MODES = {"auto", "sleep", "favorite"}
+
+-- PM2.5 등급 (환경부 기준 15/35/75, PV28-CW 드라이버와 같은 구분)
+local SUPPORTED_FINE_DUST_VALUES = {"good", "slightlyUnhealthy", "unhealthy", "veryUnhealthy"}
+
+local function fine_dust_concern(pm25)
+    if pm25 <= 15 then return "good" end
+    if pm25 <= 35 then return "slightlyUnhealthy" end
+    if pm25 <= 75 then return "unhealthy" end
+    return "veryUnhealthy"
+end
 
 local function miio_on_off_to_st(value)
     if value == "on" or value == true then
@@ -121,6 +120,8 @@ local function poll_device_status(device)
 
     if values.aqi and type(values.aqi) == "number" then
         device:emit_event(capabilities.fineDustSensor.fineDustLevel(math.floor(values.aqi)))
+        device:emit_event(capabilities.fineDustHealthConcern.supportedFineDustValues({value = SUPPORTED_FINE_DUST_VALUES}))
+        device:emit_event(capabilities.fineDustHealthConcern.fineDustHealthConcern({value = fine_dust_concern(values.aqi)}))
     end
 
     if values.humidity and type(values.humidity) == "number" then
@@ -297,7 +298,9 @@ local function refresh_handler(_, device, _)
 end
 
 local function ensure_profile(device)
-    if not device:supports_capability_by_id(indicatorLight.ID, "main")
+    if not device:supports_capability_by_id(airModeAirPurifierMode.ID, "main")
+        or not device:supports_capability_by_id(capabilities.fineDustHealthConcern.ID, "main")
+        or not device:supports_capability_by_id(indicatorLight.ID, "main")
         or not device:supports_capability_by_id(capabilities.audioVolume.ID, "main") then
         device:try_update_metadata({profile = PROFILE_NAME})
     end
@@ -307,7 +310,6 @@ local function device_added(_, device)
     ensure_profile(device)
     device:emit_event(capabilities.switch.switch.off())
     device:emit_event(airModeAirPurifierMode.airPurifierMode({value = "auto"}))
-    device:emit_event(airModeAirPurifierMode.supportedAirPurifierModes({value = SUPPORTED_MODES}))
     device:emit_event(capabilities.temperatureMeasurement.temperature({value = 0, unit = "C"}))
     device:emit_event(capabilities.relativeHumidityMeasurement.humidity(0))
     device:emit_event(capabilities.fineDustSensor.fineDustLevel(0))

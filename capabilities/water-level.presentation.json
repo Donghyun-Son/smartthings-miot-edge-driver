@@ -1,0 +1,37 @@
+{
+  "dashboard": {
+    "states": [
+      {
+        "label": "{{waterLevel.value}}{{waterLevel.unit}}"
+      }
+    ],
+    "actions": []
+  },
+  "detailView": [
+    {
+      "label": "수위",
+      "displayType": "slider",
+      "slider": {
+        "range": [0, 100],
+        "unit": "waterLevel.unit",
+        "value": "waterLevel.value",
+        "valueType": "integer"
+      }
+    }
+  ],
+  "automation": {
+    "conditions": [
+      {
+        "label": "수위",
+        "displayType": "numberField",
+        "numberField": {
+          "value": "waterLevel.value",
+          "valueType": "integer",
+          "unit": "waterLevel.unit",
+          "range": [0, 100]
+        }
+      }
+    ],
+    "actions": []
+  }
+}

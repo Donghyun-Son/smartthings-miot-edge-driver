@@ -18,9 +18,12 @@ SmartThings Edge LAN driver for the Xiaomi/MIoT xiaomi humidifier p800 model `xi
 - `relativeHumidityMeasurement`
 - `concertmirror08464.xiaomiHumP800FanMode`
 - `concertmirror08464.xiaomiHumP800TargetHumidity`
-- `concertmirror08464.xiaomiHumP800Buzzer`
+- `audioMute` (buzzer, fork change)
 - `concertmirror08464.xiaomiHumP800ChildLock`
 - `concertmirror08464.xiaomiHumP800LedBrightness`
+- `tigerautumn15768.waterLevel` (fork addition)
+- `filterState` (fork addition)
+- `hardwareFault` (fork addition)
 - `refresh`
 
 ## MIoT Mapping
@@ -32,9 +35,12 @@ SmartThings Edge LAN driver for the Xiaomi/MIoT xiaomi humidifier p800 model `xi
 | relative Humidity Measurement | R | Model-specific siid/piid constants in `src/init.lua` | `relativeHumidityMeasurement` |
 | xiaomi Hum P800 Fan Mode | RW | Model-specific siid/piid constants in `src/init.lua` | `concertmirror08464.xiaomiHumP800FanMode` |
 | xiaomi Hum P800 Target Humidity | RW | Model-specific siid/piid constants in `src/init.lua` | `concertmirror08464.xiaomiHumP800TargetHumidity` |
-| xiaomi Hum P800 Buzzer | RW | Model-specific siid/piid constants in `src/init.lua` | `concertmirror08464.xiaomiHumP800Buzzer` |
+| Buzzer | RW | `siid 5 / piid 1`; on = `unmuted`, off = `muted` | `audioMute` |
 | xiaomi Hum P800 Child Lock | RW | Model-specific siid/piid constants in `src/init.lua` | `concertmirror08464.xiaomiHumP800ChildLock` |
 | xiaomi Hum P800 Led Brightness | RW | Model-specific siid/piid constants in `src/init.lua` | `concertmirror08464.xiaomiHumP800LedBrightness` |
+| Water level | R | `siid 2 / piid 13`, 0-100 % | `tigerautumn15768.waterLevel` |
+| Filter life | R + reset | `siid 4 / piid 1` %, reset via `siid 4 / aiid 1` | `filterState` |
+| Fault | R | `siid 2 / piid 2`; 1-4 = `detected`, 0 and 5 (lack of water) = `clear` | `hardwareFault` |
 | Refresh | Action | Re-read the model-specific status properties | `refresh` |
 
 Not exposed: diagnostic faults, accumulated usage, hardware metadata, private services, and other non-core values are intentionally omitted.

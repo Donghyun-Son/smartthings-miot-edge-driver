@@ -12,10 +12,11 @@ SmartThings Edge LAN driver for the Xiaomi/miIO zhimi air purifier v7 model `zhi
 ## Exposed Capabilities
 
 - `switch`
-- `concertmirror08464.zhimiAirV7AirPurifierMode`
+- `tigerautumn15768.airPurifierMode`
 - `temperatureMeasurement`
 - `relativeHumidityMeasurement`
 - `fineDustSensor`
+- `fineDustHealthConcern` (fork addition)
 - `concertmirror08464.zhimiAirV7FavoriteFanLevel`
 - `filterState`
 - `audioVolume`
@@ -28,10 +29,11 @@ SmartThings Edge LAN driver for the Xiaomi/miIO zhimi air purifier v7 model `zhi
 | Feature | Access | miIO Key | SmartThings |
 |---|---:|---|---|
 | switch | RW | Model-specific property/method constants in `src/init.lua` | `switch` |
-| zhimi Air V7 Air Purifier Mode | RW | Model-specific property/method constants in `src/init.lua` | `concertmirror08464.zhimiAirV7AirPurifierMode` |
+| zhimi Air V7 Air Purifier Mode | RW | Model-specific property/method constants in `src/init.lua` | `tigerautumn15768.airPurifierMode` |
 | temperature Measurement | R | Model-specific property/method constants in `src/init.lua` | `temperatureMeasurement` |
 | relative Humidity Measurement | R | Model-specific property/method constants in `src/init.lua` | `relativeHumidityMeasurement` |
 | fine Dust Sensor | R | Model-specific property/method constants in `src/init.lua` | `fineDustSensor` |
+| PM2.5 grade | R | Derived from `aqi`: <=15 good, <=35 slightlyUnhealthy, <=75 unhealthy, above veryUnhealthy | `fineDustHealthConcern` |
 | Favorite speed | RW | `favorite_level`, `set_level_favorite`; `0..17` raw level | `concertmirror08464.zhimiAirV7FavoriteFanLevel` |
 | Filter life | R | `filter1_life`, %; exact V7 sources expose no reset action | `filterState` |
 | Audio volume | RW | `volume`, `set_volume`; integer `0..100`, `%` | `audioVolume` |

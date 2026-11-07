@@ -1,0 +1,32 @@
+{
+  "tag": "ko",
+  "label": "공기청정기 모드",
+  "attributes": {
+    "airPurifierMode": {
+      "label": "공기청정기 모드",
+      "displayTemplate": "{{device.label}}의 {{attribute}}: {{value}}",
+      "i18n": {
+        "value": {
+          "auto": { "label": "자동" },
+          "sleep": { "label": "수면" },
+          "favorite": { "label": "즐겨찾기" }
+        }
+      }
+    }
+  },
+  "commands": {
+    "setAirPurifierMode": {
+      "label": "공기청정기 모드 설정",
+      "arguments": {
+        "mode": {
+          "label": "모드",
+          "i18n": {
+            "auto": { "label": "자동" },
+            "sleep": { "label": "수면" },
+            "favorite": { "label": "즐겨찾기" }
+          }
+        }
+      }
+    }
+  }
+}

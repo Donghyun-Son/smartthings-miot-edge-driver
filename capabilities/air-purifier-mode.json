@@ -1,0 +1,35 @@
+{
+  "name": "Air Purifier Mode",
+  "attributes": {
+    "airPurifierMode": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "enum": ["auto", "sleep", "favorite"]
+          }
+        },
+        "additionalProperties": false,
+        "required": ["value"]
+      },
+      "setter": "setAirPurifierMode",
+      "enumCommands": []
+    }
+  },
+  "commands": {
+    "setAirPurifierMode": {
+      "name": "setAirPurifierMode",
+      "arguments": [
+        {
+          "name": "mode",
+          "optional": false,
+          "schema": {
+            "type": "string",
+            "enum": ["auto", "sleep", "favorite"]
+          }
+        }
+      ]
+    }
+  }
+}

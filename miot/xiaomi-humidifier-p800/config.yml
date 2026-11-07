@@ -1,5 +1,5 @@
-name: 'Xiaomi Humidifier P800'
-packageKey: 'Xiaomi Humidifier P800 Driver'
+name: 'Xiaomi Humidifier P800 (Custom)'
+packageKey: 'xiaomi-humidifier-p800-custom'
 permissions:
   lan: {}
   discovery: {}

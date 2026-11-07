@@ -12,11 +12,17 @@ components:
     version: 1
   - id: concertmirror08464.xiaomiHumP800TargetHumidity
     version: 1
-  - id: concertmirror08464.xiaomiHumP800Buzzer
+  - id: audioMute
     version: 1
   - id: concertmirror08464.xiaomiHumP800ChildLock
     version: 1
   - id: concertmirror08464.xiaomiHumP800LedBrightness
+    version: 1
+  - id: tigerautumn15768.waterLevel
+    version: 1
+  - id: filterState
+    version: 1
+  - id: hardwareFault
     version: 1
   - id: refresh
     version: 1
@@ -55,13 +61,22 @@ deviceConfig:
     capability: relativeHumidityMeasurement
     version: 1
   - component: main
+    capability: tigerautumn15768.waterLevel
+    version: 1
+  - component: main
+    capability: filterState
+    version: 1
+  - component: main
+    capability: hardwareFault
+    version: 1
+  - component: main
     capability: concertmirror08464.xiaomiHumP800FanMode
     version: 1
   - component: main
     capability: concertmirror08464.xiaomiHumP800TargetHumidity
     version: 1
   - component: main
-    capability: concertmirror08464.xiaomiHumP800Buzzer
+    capability: audioMute
     version: 1
   - component: main
     capability: concertmirror08464.xiaomiHumP800ChildLock
@@ -84,13 +99,22 @@ deviceConfig:
       capability: relativeHumidityMeasurement
       version: 1
     - component: main
+      capability: tigerautumn15768.waterLevel
+      version: 1
+    - component: main
+      capability: filterState
+      version: 1
+    - component: main
+      capability: hardwareFault
+      version: 1
+    - component: main
       capability: concertmirror08464.xiaomiHumP800FanMode
       version: 1
     - component: main
       capability: concertmirror08464.xiaomiHumP800TargetHumidity
       version: 1
     - component: main
-      capability: concertmirror08464.xiaomiHumP800Buzzer
+      capability: audioMute
       version: 1
     - component: main
       capability: concertmirror08464.xiaomiHumP800ChildLock
@@ -109,7 +133,7 @@ deviceConfig:
       capability: concertmirror08464.xiaomiHumP800TargetHumidity
       version: 1
     - component: main
-      capability: concertmirror08464.xiaomiHumP800Buzzer
+      capability: audioMute
       version: 1
     - component: main
       capability: concertmirror08464.xiaomiHumP800ChildLock

@@ -10,9 +10,9 @@ local miot = require "miot"
 
 local capFanmodeFanMode = capabilities["concertmirror08464.xiaomiHumP800FanMode"]
 local capTargethumidityTargetHumidity = capabilities["concertmirror08464.xiaomiHumP800TargetHumidity"]
-local deviceControlsBuzzer = capabilities["concertmirror08464.xiaomiHumP800Buzzer"]
 local deviceControlsChildLock = capabilities["concertmirror08464.xiaomiHumP800ChildLock"]
 local deviceControlsLedBrightness = capabilities["concertmirror08464.xiaomiHumP800LedBrightness"]
+local capWaterLevel = capabilities["tigerautumn15768.waterLevel"]
 
 -- 상수 정의
 
@@ -27,6 +27,8 @@ local ENVIRONMENT_SIID = 3      -- 환경 센서
 local POWER_PIID = 1            -- 전원 on/off
 local MODE_PIID = 3             -- 모드 (0=Constant, 1=Sleep, 2=Strong)
 local TARGET_HUMIDITY_PIID = 6  -- 목표 습도 (40-70%)
+local WATER_LEVEL_PIID = 13     -- 수위 (0-100%)
+local FAULT_PIID = 2            -- 고장 코드 (0=정상, 1~4=고장, 5=물 부족)
 
 -- MIoT 속성 ID (기기 제어 서비스)
 local BUZZER_SIID = 5
@@ -36,6 +38,9 @@ local SCREEN_SWITCH_PIID = 1
 local SCREEN_BRIGHTNESS_PIID = 2
 local CHILD_LOCK_SIID = 7
 local CHILD_LOCK_PIID = 1
+local FILTER_SIID = 4
+local FILTER_LIFE_PIID = 1
+local FILTER_RESET_AIID = 1
 local LED_BRIGHTNESS_TO_ST = {
     [0] = "dim",
     [1] = "bright"
@@ -92,10 +97,13 @@ local function poll_device_status(device)
         {siid = HUMIDIFIER_SIID, piid = POWER_PIID},
         {siid = HUMIDIFIER_SIID, piid = MODE_PIID},
         {siid = HUMIDIFIER_SIID, piid = TARGET_HUMIDITY_PIID},
+        {siid = HUMIDIFIER_SIID, piid = WATER_LEVEL_PIID},
+        {siid = HUMIDIFIER_SIID, piid = FAULT_PIID},
         {siid = BUZZER_SIID, piid = BUZZER_PIID},
         {siid = SCREEN_SIID, piid = SCREEN_SWITCH_PIID},
         {siid = SCREEN_SIID, piid = SCREEN_BRIGHTNESS_PIID},
         {siid = CHILD_LOCK_SIID, piid = CHILD_LOCK_PIID},
+        {siid = FILTER_SIID, piid = FILTER_LIFE_PIID},
         {siid = ENVIRONMENT_SIID, piid = HUMIDITY_PIID},
         {siid = ENVIRONMENT_SIID, piid = TEMPERATURE_PIID}
     }
@@ -113,6 +121,7 @@ local function poll_device_status(device)
     
     -- 응답 처리
     local screen_on = nil
+    device:emit_event(capabilities.filterState.supportedFilterCommands({value = {"resetFilter"}}))
     for _, result in ipairs(response.result) do
         if result.code == 0 then
             local siid = result.siid
@@ -128,9 +137,18 @@ local function poll_device_status(device)
                     device:emit_event(capFanmodeFanMode.fanMode({value = mode}))
                 elseif piid == TARGET_HUMIDITY_PIID then
                     device:emit_event(capTargethumidityTargetHumidity.targetHumidity({value = value, unit = "%"}))
+                elseif piid == WATER_LEVEL_PIID and type(value) == "number" then
+                    local level = math.max(0, math.min(100, math.floor(value)))
+                    device:emit_event(capWaterLevel.waterLevel({value = level, unit = "%"}))
+                elseif piid == FAULT_PIID and type(value) == "number" then
+                    -- 5(물 부족)는 고장이 아니라 수위로 보여준다
+                    local detected = value >= 1 and value <= 4
+                    device:emit_event(detected and capabilities.hardwareFault.hardwareFault.detected()
+                        or capabilities.hardwareFault.hardwareFault.clear())
                 end
             elseif siid == BUZZER_SIID and piid == BUZZER_PIID then
-                device:emit_event(deviceControlsBuzzer.buzzer({value = value and "on" or "off"}))
+                device:emit_event(value and capabilities.audioMute.mute.unmuted()
+                    or capabilities.audioMute.mute.muted())
             elseif siid == SCREEN_SIID and piid == SCREEN_SWITCH_PIID then
                 screen_on = value
                 if not value then
@@ -143,6 +161,9 @@ local function poll_device_status(device)
                 end
             elseif siid == CHILD_LOCK_SIID and piid == CHILD_LOCK_PIID then
                 device:emit_event(deviceControlsChildLock.childLock({value = value and "on" or "off"}))
+            elseif siid == FILTER_SIID and piid == FILTER_LIFE_PIID and type(value) == "number" then
+                local life = math.max(0, math.min(100, math.floor(value)))
+                device:emit_event(capabilities.filterState.filterLifeRemaining({value = life, unit = "%"}))
             -- 환경 센서 데이터
             elseif siid == ENVIRONMENT_SIID then
                 if piid == HUMIDITY_PIID then
@@ -295,15 +316,43 @@ local function set_led_brightness_handler(_, device, command)
     end
 end
 
-local function set_buzzer_handler(_, device, command)
+-- 부저: 켜짐 = 음소거 해제, 꺼짐 = 음소거
+local function set_buzzer(device, enabled)
     local ip, token = get_device_config(device)
     if not ip then return end
 
-    local value = command.args.buzzer == "on"
-    local ok = pcall(miot.set, device, ip, token, BUZZER_SIID, BUZZER_PIID, value)
+    local ok = pcall(miot.set, device, ip, token, BUZZER_SIID, BUZZER_PIID, enabled)
     if ok then
-        device:emit_event(deviceControlsBuzzer.buzzer({value = command.args.buzzer}))
+        device:emit_event(enabled and capabilities.audioMute.mute.unmuted()
+            or capabilities.audioMute.mute.muted())
     end
+end
+
+local function set_mute_handler(_, device, command)
+    set_buzzer(device, command.args.state == "unmuted")
+end
+
+local function mute_handler(_, device, _)
+    set_buzzer(device, false)
+end
+
+local function unmute_handler(_, device, _)
+    set_buzzer(device, true)
+end
+
+-- 필터 수명 초기화
+local function reset_filter_handler(_, device, _)
+    local ip, token = get_device_config(device)
+    if not ip then return end
+
+    local ok, err = pcall(miot.action, device, ip, token, FILTER_SIID, FILTER_RESET_AIID)
+    if not ok then
+        log.error("필터 초기화 실패: " .. tostring(err))
+        return
+    end
+    device.thread:call_with_delay(1, function()
+        pcall(poll_device_status, device)
+    end)
 end
 
 local function set_child_lock_handler(_, device, command)
@@ -326,7 +375,11 @@ end
 
 -- 장치 추가됨
 local function ensure_profile(device)
-    if not device:supports_capability_by_id(capFanmodeFanMode.ID, "main") then
+    if not device:supports_capability_by_id(capFanmodeFanMode.ID, "main")
+        or not device:supports_capability_by_id(capWaterLevel.ID, "main")
+        or not device:supports_capability_by_id(capabilities.audioMute.ID, "main")
+        or not device:supports_capability_by_id(capabilities.filterState.ID, "main")
+        or not device:supports_capability_by_id(capabilities.hardwareFault.ID, "main") then
         device:try_update_metadata({profile = "xiaomi-humidifier-p800"})
     end
 end
@@ -340,7 +393,6 @@ local function device_added(_, device)
     device:emit_event(capFanmodeFanMode.fanMode({value = "constant"}))
     device:emit_event(capTargethumidityTargetHumidity.targetHumidity({value = 50, unit = "%"}))
     device:emit_event(deviceControlsLedBrightness.ledBrightness({value = "bright"}))
-    device:emit_event(deviceControlsBuzzer.buzzer({value = "off"}))
     device:emit_event(deviceControlsChildLock.childLock({value = "off"}))
 end
 
@@ -414,8 +466,13 @@ local driver = Driver("miot-humidifier-p800", {
         [deviceControlsLedBrightness.ID] = {
             [deviceControlsLedBrightness.commands.setLedBrightness.NAME] = set_led_brightness_handler
         },
-        [deviceControlsBuzzer.ID] = {
-            [deviceControlsBuzzer.commands.setBuzzer.NAME] = set_buzzer_handler
+        [capabilities.audioMute.ID] = {
+            [capabilities.audioMute.commands.setMute.NAME] = set_mute_handler,
+            [capabilities.audioMute.commands.mute.NAME] = mute_handler,
+            [capabilities.audioMute.commands.unmute.NAME] = unmute_handler
+        },
+        [capabilities.filterState.ID] = {
+            [capabilities.filterState.commands.resetFilter.NAME] = reset_filter_handler
         },
         [deviceControlsChildLock.ID] = {
             [deviceControlsChildLock.commands.setChildLock.NAME] = set_child_lock_handler

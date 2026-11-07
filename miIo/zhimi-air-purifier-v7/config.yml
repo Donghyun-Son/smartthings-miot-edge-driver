@@ -1,5 +1,5 @@
-name: 'Zhimi Air Purifier V7'
-packageKey: 'Zhimi Air Purifier V7 Driver'
+name: 'Zhimi Air Purifier V7 (Custom)'
+packageKey: 'zhimi-air-purifier-v7-custom'
 permissions:
   lan: {}
   discovery: {}

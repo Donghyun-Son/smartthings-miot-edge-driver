@@ -1,0 +1,73 @@
+{
+  "dashboard": {
+    "states": [
+      {
+        "label": "{{airPurifierMode.value}}",
+        "alternatives": [
+          { "key": "auto", "value": "자동", "type": "active" },
+          { "key": "sleep", "value": "수면", "type": "active" },
+          { "key": "favorite", "value": "즐겨찾기", "type": "active" }
+        ]
+      }
+    ],
+    "actions": []
+  },
+  "detailView": [
+    {
+      "label": "공기청정기 모드",
+      "displayType": "list",
+      "list": {
+        "command": {
+          "name": "setAirPurifierMode",
+          "alternatives": [
+            { "key": "auto", "value": "자동", "type": "active" },
+            { "key": "sleep", "value": "수면", "type": "active" },
+            { "key": "favorite", "value": "즐겨찾기", "type": "active" }
+          ],
+          "argumentType": "string"
+        },
+        "state": {
+          "value": "airPurifierMode.value",
+          "valueType": "string",
+          "alternatives": [
+            { "key": "auto", "value": "자동", "type": "active" },
+            { "key": "sleep", "value": "수면", "type": "active" },
+            { "key": "favorite", "value": "즐겨찾기", "type": "active" }
+          ]
+        }
+      }
+    }
+  ],
+  "automation": {
+    "conditions": [
+      {
+        "label": "공기청정기 모드",
+        "displayType": "list",
+        "list": {
+          "alternatives": [
+            { "key": "auto", "value": "자동", "type": "active" },
+            { "key": "sleep", "value": "수면", "type": "active" },
+            { "key": "favorite", "value": "즐겨찾기", "type": "active" }
+          ],
+          "value": "airPurifierMode.value",
+          "valueType": "string"
+        }
+      }
+    ],
+    "actions": [
+      {
+        "label": "공기청정기 모드",
+        "displayType": "list",
+        "list": {
+          "alternatives": [
+            { "key": "auto", "value": "자동", "type": "active" },
+            { "key": "sleep", "value": "수면", "type": "active" },
+            { "key": "favorite", "value": "즐겨찾기", "type": "active" }
+          ],
+          "command": "setAirPurifierMode",
+          "argumentType": "string"
+        }
+      }
+    ]
+  }
+}
