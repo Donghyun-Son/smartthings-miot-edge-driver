@@ -36,7 +36,7 @@ components:
   - name: Humidifier
 metadata:
   mnmn: SmartThingsCommunity
-  vid: e61dbbaa-1e34-3e85-9ea8-ae71ec3ec146
+  vid: 75c81b64-4067-3962-a37f-0369bb0d7386
 
 preferences:
 - name: ipAddress

@@ -148,7 +148,16 @@
       "capability": "tigerautumn15768.overwetProtect",
       "version": 1,
       "values": [],
-      "patch": []
+      "patch": [],
+      "visibleCondition": {
+        "capability": "concertmirror08464.xiaomiHumP800FanMode",
+        "version": 1,
+        "component": "main",
+        "value": "fanMode.value",
+        "operator": "EQUALS",
+        "operand": "strong",
+        "hideOnUnmatch": true
+      }
     },
     {
       "component": "main",
