@@ -1,0 +1,60 @@
+{
+  "dashboard": {
+    "states": [],
+    "actions": []
+  },
+  "detailView": [
+    {
+      "label": "과습 방지",
+      "displayType": "list",
+      "list": {
+        "command": {
+          "name": "setOverwetProtect",
+          "alternatives": [
+            { "key": "off", "value": "꺼짐", "type": "inactive" },
+            { "key": "on", "value": "켜짐", "type": "active" }
+          ],
+          "argumentType": "string"
+        },
+        "state": {
+          "value": "overwetProtect.value",
+          "valueType": "string",
+          "alternatives": [
+            { "key": "off", "value": "꺼짐", "type": "inactive" },
+            { "key": "on", "value": "켜짐", "type": "active" }
+          ]
+        }
+      }
+    }
+  ],
+  "automation": {
+    "conditions": [
+      {
+        "label": "과습 방지",
+        "displayType": "list",
+        "list": {
+          "alternatives": [
+            { "key": "off", "value": "꺼짐", "type": "inactive" },
+            { "key": "on", "value": "켜짐", "type": "active" }
+          ],
+          "value": "overwetProtect.value",
+          "valueType": "string"
+        }
+      }
+    ],
+    "actions": [
+      {
+        "label": "과습 방지",
+        "displayType": "list",
+        "list": {
+          "alternatives": [
+            { "key": "off", "value": "꺼짐", "type": "inactive" },
+            { "key": "on", "value": "켜짐", "type": "active" }
+          ],
+          "command": "setOverwetProtect",
+          "argumentType": "string"
+        }
+      }
+    ]
+  }
+}

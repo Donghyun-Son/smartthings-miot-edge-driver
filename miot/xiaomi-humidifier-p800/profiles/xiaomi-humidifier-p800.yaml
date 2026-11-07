@@ -26,6 +26,10 @@ components:
     version: 1
   - id: refresh
     version: 1
+  - id: tigerautumn15768.overwetProtect
+    version: 1
+  - id: tigerautumn15768.filterAutoDry
+    version: 1
   categories:
   - name: Humidifier
 deviceConfig:
@@ -87,6 +91,12 @@ deviceConfig:
   - component: main
     capability: refresh
     version: 1
+  - component: main
+    capability: tigerautumn15768.overwetProtect
+    version: 1
+  - component: main
+    capability: tigerautumn15768.filterAutoDry
+    version: 1
   automation:
     conditions:
     - component: main
@@ -122,6 +132,12 @@ deviceConfig:
     - component: main
       capability: concertmirror08464.xiaomiHumP800LedBrightness
       version: 1
+    - component: main
+      capability: tigerautumn15768.overwetProtect
+      version: 1
+    - component: main
+      capability: tigerautumn15768.filterAutoDry
+      version: 1
     actions:
     - component: main
       capability: switch
@@ -140,6 +156,12 @@ deviceConfig:
       version: 1
     - component: main
       capability: concertmirror08464.xiaomiHumP800LedBrightness
+      version: 1
+    - component: main
+      capability: tigerautumn15768.overwetProtect
+      version: 1
+    - component: main
+      capability: tigerautumn15768.filterAutoDry
       version: 1
 
 preferences:

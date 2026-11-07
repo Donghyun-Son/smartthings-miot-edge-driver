@@ -13,6 +13,8 @@ local capTargethumidityTargetHumidity = capabilities["concertmirror08464.xiaomiH
 local deviceControlsChildLock = capabilities["concertmirror08464.xiaomiHumP800ChildLock"]
 local deviceControlsLedBrightness = capabilities["concertmirror08464.xiaomiHumP800LedBrightness"]
 local capWaterLevel = capabilities["tigerautumn15768.waterLevel"]
+local capOverwetProtect = capabilities["tigerautumn15768.overwetProtect"]
+local capFilterAutoDry = capabilities["tigerautumn15768.filterAutoDry"]
 
 -- 상수 정의
 
@@ -29,6 +31,9 @@ local MODE_PIID = 3             -- 모드 (0=Constant, 1=Sleep, 2=Strong)
 local TARGET_HUMIDITY_PIID = 6  -- 목표 습도 (40-70%)
 local WATER_LEVEL_PIID = 13     -- 수위 (0-100%)
 local FAULT_PIID = 2            -- 고장 코드 (0=정상, 1~4=고장, 5=물 부족)
+local OVERWET_PROTECT_PIID = 10 -- 과습 방지
+local AUTO_DRY_PIID = 11        -- 필터 자동 건조
+local DRY_REMAIN_PIID = 12      -- 남은 건조 시간 (초, 0-1000)
 
 -- MIoT 속성 ID (기기 제어 서비스)
 local BUZZER_SIID = 5
@@ -99,6 +104,9 @@ local function poll_device_status(device)
         {siid = HUMIDIFIER_SIID, piid = TARGET_HUMIDITY_PIID},
         {siid = HUMIDIFIER_SIID, piid = WATER_LEVEL_PIID},
         {siid = HUMIDIFIER_SIID, piid = FAULT_PIID},
+        {siid = HUMIDIFIER_SIID, piid = OVERWET_PROTECT_PIID},
+        {siid = HUMIDIFIER_SIID, piid = AUTO_DRY_PIID},
+        {siid = HUMIDIFIER_SIID, piid = DRY_REMAIN_PIID},
         {siid = BUZZER_SIID, piid = BUZZER_PIID},
         {siid = SCREEN_SIID, piid = SCREEN_SWITCH_PIID},
         {siid = SCREEN_SIID, piid = SCREEN_BRIGHTNESS_PIID},
@@ -145,6 +153,13 @@ local function poll_device_status(device)
                     local detected = value >= 1 and value <= 4
                     device:emit_event(detected and capabilities.hardwareFault.hardwareFault.detected()
                         or capabilities.hardwareFault.hardwareFault.clear())
+                elseif piid == OVERWET_PROTECT_PIID and type(value) == "boolean" then
+                    device:emit_event(capOverwetProtect.overwetProtect({value = value and "on" or "off"}))
+                elseif piid == AUTO_DRY_PIID and type(value) == "boolean" then
+                    device:emit_event(capFilterAutoDry.autoDry({value = value and "on" or "off"}))
+                elseif piid == DRY_REMAIN_PIID and type(value) == "number" then
+                    local remain = math.max(0, math.min(1000, math.floor(value)))
+                    device:emit_event(capFilterAutoDry.dryRemainingTime({value = remain}))
                 end
             elseif siid == BUZZER_SIID and piid == BUZZER_PIID then
                 device:emit_event(value and capabilities.audioMute.mute.unmuted()
@@ -340,6 +355,29 @@ local function unmute_handler(_, device, _)
     set_buzzer(device, true)
 end
 
+-- 과습 방지 / 필터 자동 건조 (가습기 서비스의 on/off 속성)
+local function set_humidifier_toggle(device, piid, enabled, emit)
+    local ip, token = get_device_config(device)
+    if not ip then return end
+
+    local ok = pcall(miot.set, device, ip, token, HUMIDIFIER_SIID, piid, enabled)
+    if ok then
+        emit(enabled and "on" or "off")
+    end
+end
+
+local function set_overwet_protect_handler(_, device, command)
+    set_humidifier_toggle(device, OVERWET_PROTECT_PIID, command.args.overwetProtect == "on", function(state)
+        device:emit_event(capOverwetProtect.overwetProtect({value = state}))
+    end)
+end
+
+local function set_auto_dry_handler(_, device, command)
+    set_humidifier_toggle(device, AUTO_DRY_PIID, command.args.autoDry == "on", function(state)
+        device:emit_event(capFilterAutoDry.autoDry({value = state}))
+    end)
+end
+
 -- 필터 수명 초기화
 local function reset_filter_handler(_, device, _)
     local ip, token = get_device_config(device)
@@ -379,7 +417,9 @@ local function ensure_profile(device)
         or not device:supports_capability_by_id(capWaterLevel.ID, "main")
         or not device:supports_capability_by_id(capabilities.audioMute.ID, "main")
         or not device:supports_capability_by_id(capabilities.filterState.ID, "main")
-        or not device:supports_capability_by_id(capabilities.hardwareFault.ID, "main") then
+        or not device:supports_capability_by_id(capabilities.hardwareFault.ID, "main")
+        or not device:supports_capability_by_id(capOverwetProtect.ID, "main")
+        or not device:supports_capability_by_id(capFilterAutoDry.ID, "main") then
         device:try_update_metadata({profile = "xiaomi-humidifier-p800"})
     end
 end
@@ -473,6 +513,12 @@ local driver = Driver("miot-humidifier-p800", {
         },
         [capabilities.filterState.ID] = {
             [capabilities.filterState.commands.resetFilter.NAME] = reset_filter_handler
+        },
+        [capOverwetProtect.ID] = {
+            [capOverwetProtect.commands.setOverwetProtect.NAME] = set_overwet_protect_handler
+        },
+        [capFilterAutoDry.ID] = {
+            [capFilterAutoDry.commands.setAutoDry.NAME] = set_auto_dry_handler
         },
         [deviceControlsChildLock.ID] = {
             [deviceControlsChildLock.commands.setChildLock.NAME] = set_child_lock_handler

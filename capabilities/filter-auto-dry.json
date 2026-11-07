@@ -1,0 +1,50 @@
+{
+  "name": "Filter Auto Dry",
+  "attributes": {
+    "autoDry": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "enum": ["off", "on"]
+          }
+        },
+        "additionalProperties": false,
+        "required": ["value"]
+      },
+      "setter": "setAutoDry",
+      "enumCommands": []
+    },
+    "dryRemainingTime": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000
+          }
+        },
+        "additionalProperties": false,
+        "required": ["value"]
+      },
+      "enumCommands": []
+    }
+  },
+  "commands": {
+    "setAutoDry": {
+      "name": "setAutoDry",
+      "arguments": [
+        {
+          "name": "autoDry",
+          "optional": false,
+          "schema": {
+            "type": "string",
+            "enum": ["off", "on"]
+          }
+        }
+      ]
+    }
+  }
+}

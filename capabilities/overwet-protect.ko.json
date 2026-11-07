@@ -1,0 +1,30 @@
+{
+  "tag": "ko",
+  "label": "과습 방지",
+  "attributes": {
+    "overwetProtect": {
+      "label": "과습 방지",
+      "displayTemplate": "{{device.label}}의 {{attribute}}: {{value}}",
+      "i18n": {
+        "value": {
+          "off": { "label": "꺼짐" },
+          "on": { "label": "켜짐" }
+        }
+      }
+    }
+  },
+  "commands": {
+    "setOverwetProtect": {
+      "label": "과습 방지 설정",
+      "arguments": {
+        "overwetProtect": {
+          "label": "과습 방지",
+          "i18n": {
+            "off": { "label": "꺼짐" },
+            "on": { "label": "켜짐" }
+          }
+        }
+      }
+    }
+  }
+}

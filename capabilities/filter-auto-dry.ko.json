@@ -1,0 +1,34 @@
+{
+  "tag": "ko",
+  "label": "필터 자동 건조",
+  "attributes": {
+    "autoDry": {
+      "label": "필터 자동 건조",
+      "displayTemplate": "{{device.label}}의 {{attribute}}: {{value}}",
+      "i18n": {
+        "value": {
+          "off": { "label": "꺼짐" },
+          "on": { "label": "켜짐" }
+        }
+      }
+    },
+    "dryRemainingTime": {
+      "label": "남은 건조 시간",
+      "displayTemplate": "{{device.label}}의 {{attribute}}: {{value}}초"
+    }
+  },
+  "commands": {
+    "setAutoDry": {
+      "label": "필터 자동 건조 설정",
+      "arguments": {
+        "autoDry": {
+          "label": "필터 자동 건조",
+          "i18n": {
+            "off": { "label": "꺼짐" },
+            "on": { "label": "켜짐" }
+          }
+        }
+      }
+    }
+  }
+}

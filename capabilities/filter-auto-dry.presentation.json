@@ -1,0 +1,67 @@
+{
+  "dashboard": {
+    "states": [],
+    "actions": []
+  },
+  "detailView": [
+    {
+      "label": "필터 자동 건조",
+      "displayType": "list",
+      "list": {
+        "command": {
+          "name": "setAutoDry",
+          "alternatives": [
+            { "key": "off", "value": "꺼짐", "type": "inactive" },
+            { "key": "on", "value": "켜짐", "type": "active" }
+          ],
+          "argumentType": "string"
+        },
+        "state": {
+          "value": "autoDry.value",
+          "valueType": "string",
+          "alternatives": [
+            { "key": "off", "value": "꺼짐", "type": "inactive" },
+            { "key": "on", "value": "켜짐", "type": "active" }
+          ]
+        }
+      }
+    },
+    {
+      "label": "남은 건조 시간",
+      "displayType": "state",
+      "state": {
+        "label": "{{dryRemainingTime.value}}초"
+      }
+    }
+  ],
+  "automation": {
+    "conditions": [
+      {
+        "label": "필터 자동 건조",
+        "displayType": "list",
+        "list": {
+          "alternatives": [
+            { "key": "off", "value": "꺼짐", "type": "inactive" },
+            { "key": "on", "value": "켜짐", "type": "active" }
+          ],
+          "value": "autoDry.value",
+          "valueType": "string"
+        }
+      }
+    ],
+    "actions": [
+      {
+        "label": "필터 자동 건조",
+        "displayType": "list",
+        "list": {
+          "alternatives": [
+            { "key": "off", "value": "꺼짐", "type": "inactive" },
+            { "key": "on", "value": "켜짐", "type": "active" }
+          ],
+          "command": "setAutoDry",
+          "argumentType": "string"
+        }
+      }
+    ]
+  }
+}

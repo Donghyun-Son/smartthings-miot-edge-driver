@@ -1,0 +1,35 @@
+{
+  "name": "Overwet Protect",
+  "attributes": {
+    "overwetProtect": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "enum": ["off", "on"]
+          }
+        },
+        "additionalProperties": false,
+        "required": ["value"]
+      },
+      "setter": "setOverwetProtect",
+      "enumCommands": []
+    }
+  },
+  "commands": {
+    "setOverwetProtect": {
+      "name": "setOverwetProtect",
+      "arguments": [
+        {
+          "name": "overwetProtect",
+          "optional": false,
+          "schema": {
+            "type": "string",
+            "enum": ["off", "on"]
+          }
+        }
+      ]
+    }
+  }
+}
