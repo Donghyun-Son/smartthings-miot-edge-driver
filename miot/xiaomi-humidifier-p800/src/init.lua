@@ -34,7 +34,7 @@ local WATER_LEVEL_PIID = 13     -- 수위 (0-100%)
 local FAULT_PIID = 2            -- 고장 코드 (0=정상, 1~4=고장, 5=물 부족)
 local OVERWET_PROTECT_PIID = 10 -- 과습 방지
 local AUTO_DRY_PIID = 11        -- 필터 자동 건조
-local DRY_REMAIN_PIID = 12      -- 남은 건조 시간 (초, 0-1000)
+local DRY_REMAIN_PIID = 12      -- 남은 건조 시간 (분, 0-1000; 스펙은 초로 표기하지만 실제 기기는 분)
 
 -- MIoT 속성 ID (기기 제어 서비스)
 local BUZZER_SIID = 5

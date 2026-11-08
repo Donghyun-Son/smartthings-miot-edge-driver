@@ -46,7 +46,7 @@ SmartThings Edge LAN driver for the Xiaomi/MIoT xiaomi humidifier p800 model `xi
 | Fault | R | `siid 2 / piid 2`; 1-4 = `detected`, 0 and 5 (lack of water) = `clear` | `hardwareFault` |
 | Overwet protect | RW | `siid 2 / piid 10`, on/off | `tigerautumn15768.overwetProtect` |
 | Filter auto dry | RW | `siid 2 / piid 11`, on/off | `tigerautumn15768.filterAutoDry` |
-| Remaining dry time | R | `siid 2 / piid 12`, seconds | `tigerautumn15768.dryRemainingTime` |
+| Remaining dry time | R | `siid 2 / piid 12`, minutes (the MIoT spec says seconds, the device reports minutes) | `tigerautumn15768.dryRemainingTime` |
 | Refresh | Action | Re-read the model-specific status properties | `refresh` |
 
 Not exposed: diagnostic faults, accumulated usage, hardware metadata, private services, and other non-core values are intentionally omitted.

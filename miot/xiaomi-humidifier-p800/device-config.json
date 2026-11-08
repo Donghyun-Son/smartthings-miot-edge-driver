@@ -79,8 +79,8 @@
       "patch": [],
       "visibleCondition": {
         "value": "dryRemainingTime.value",
-        "operator": "GREATER_THAN",
-        "operand": 0,
+        "operator": "GREATER_THAN_OR_EQUALS",
+        "operand": 1,
         "component": "main",
         "capability": "tigerautumn15768.dryRemainingTime",
         "version": 1,
